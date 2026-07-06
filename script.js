@@ -62,3 +62,33 @@ buildSlider?.addEventListener('touchend', event => {
   const distance = event.changedTouches[0].clientX - touchStartX;
   if (Math.abs(distance) > 45) showBuild(buildIndex + (distance < 0 ? 1 : -1));
 }, { passive: true });
+
+const inquiryForm = document.querySelector('.inquiry-form');
+inquiryForm?.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!inquiryForm.checkValidity()) {
+    inquiryForm.reportValidity();
+    return;
+  }
+
+  const formData = new FormData(inquiryForm);
+  const name = formData.get('name') || '';
+  const email = formData.get('email') || '';
+  const phone = formData.get('phone') || '';
+  const project = formData.get('project') || '';
+  const message = formData.get('message') || '';
+  const subject = `Website inquiry from ${name}`;
+  const body = [
+    'New website inquiry for Starwood Builders',
+    '',
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Phone: ${phone}`,
+    `Interested in: ${project}`,
+    '',
+    'Project details:',
+    message
+  ].join('\n');
+
+  window.location.href = `mailto:sal@starwood-builders.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
